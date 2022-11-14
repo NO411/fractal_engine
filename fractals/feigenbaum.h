@@ -91,7 +91,7 @@ namespace feigenbaum
 
 				// convert y value to drawing coordinate system
 				long double y = canvas.texture.height * x;
-				DrawPixelV({(float)currentPixel, (float)y}, settings::DEFAULT_COLOR);
+				DrawPixelV({(float)currentPixel, (float)y}, {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, 20});
 
 				EndBlendMode();
 				EndTextureMode();

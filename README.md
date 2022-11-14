@@ -2,14 +2,14 @@
 Made with Raylib.
 
 <p float="left">
-  <img src="" width="300" />
-  <img src="" width="300" />
+  <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Dragon/Dragon_0.png?raw=true" width="300" />
+  <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Mandelbrot/Mandelbrot_0.png" width="300" />
 </p>
 
 <p float="left">
-  <img src="" width="200" />
-  <img src="" width="200" />
-  <img src="" width="200" />
+  <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Dragon/Dragon_1.png" width="200" />
+  <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Feigenbaum/Feigenbaum_0.png" width="200" />
+  <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Feigenbaum/Feigenbaum_1.png" width="200" />
 </p>
 
 ## Installation

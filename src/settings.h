@@ -15,10 +15,10 @@ namespace settings
 	constexpr Color BG_COLOR_2 = {10, 30, 40, 255};
 	constexpr Color DEFAULT_COLOR = {0, 255, 255, 255};
 
-	constexpr int FONT_SIZE = 10;
+	constexpr int FONT_SIZE = 11;
 	constexpr int FONT_SIZE_2 = 18;
 	constexpr float FONT_SPACING = 0.5;
 
-	constexpr float PARTING = IMAGE_WIDTH + DRAW_OFFSET.x + 50;
+	float PARTING = IMAGE_WIDTH + DRAW_OFFSET.x + 50;
 	constexpr Vector2 TABSIZE = {150, 40};
 }

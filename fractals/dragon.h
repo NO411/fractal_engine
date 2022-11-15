@@ -33,6 +33,7 @@ namespace dragon
 
 	void RenderAdditional(Texture2D &texture, Font &font)
 	{
+		DrawTextEx(font, ("folds: " + std::to_string(nFolds - 1)).c_str(), {settings::DRAW_OFFSET.x, settings::DRAW_OFFSET.y + settings::IMAGE_HEIGHT + 5}, settings::FONT_SIZE_2, settings::FONT_SPACING, WHITE);
 	}
 
 	bool SameFloat(float a, float b)

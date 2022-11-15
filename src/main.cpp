@@ -91,7 +91,8 @@ int main()
 		BeginDrawing();
 		ClearBackground(settings::BG_COLOR);
 
-		DrawTextureRec(fractals[currentFractal].GetCanvas().texture, {0, 0, (float)fractals[currentFractal].GetCanvas().texture.width, (float)fractals[currentFractal].GetCanvas().texture.height}, settings::DRAW_OFFSET, WHITE);
+		SetTextureFilter(fractals[currentFractal].GetCanvas().texture, TEXTURE_FILTER_BILINEAR);
+		DrawTextureEx(fractals[currentFractal].GetCanvas().texture, settings::DRAW_OFFSET, 0, 1, WHITE);
 		DrawRectangleLinesEx({settings::DRAW_OFFSET.x, settings::DRAW_OFFSET.y, settings::IMAGE_WIDTH, settings::IMAGE_HEIGHT}, 2, {255, 255, 255, 50});
 
 		fractals[currentFractal].RenderAdditional(fractals[currentFractal].GetCanvas().texture, font);
@@ -99,7 +100,7 @@ int main()
 		for (int i = 0; i < fractalNumber; i++)
 		{
 			Color tabColor = settings::BG_COLOR_2;
-			if (selectedTab == i + 1)
+			if (selectedTab == i + 1 && selectedTab - 1 != currentFractal)
 			{
 				tabColor = GRAY;
 			}

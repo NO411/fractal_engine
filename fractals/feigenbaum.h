@@ -111,6 +111,9 @@ namespace feigenbaum
 		{4, "plot values", 0, 3000, &PLOT_VALUES, PLOT_VALUES, 0, true},
 	};
 
+	std::vector<Switch> switches = {
+	};
+
 	// this passes the fractal to the main program
-	Fractal fractal("Feigenbaum", sliders, RenderAdditional, Update, Reset);
+	Fractal fractal("Feigenbaum", sliders, switches, RenderAdditional, Update, Reset);
 }

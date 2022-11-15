@@ -12,6 +12,7 @@
 #include "../fractals/dragon.h"
 
 void Init();
+float GetYSwitchOffset(int currentFractal);
 
 int main()
 {
@@ -48,6 +49,11 @@ int main()
 			{
 				slider.SetMin(fractals[currentFractal].sliders[fractals[currentFractal].GetSliderPos(slider.GetLinked())].GetValue());
 			}
+		}
+
+		for (auto &switch_ : fractals[currentFractal].switches)
+		{
+			switch_.Update(GetYSwitchOffset(currentFractal));
 		}
 
 		if (IsKeyDown(KEY_LEFT_CONTROL))
@@ -90,7 +96,6 @@ int main()
 
 		fractals[currentFractal].RenderAdditional(fractals[currentFractal].GetCanvas().texture, font);
 
-		DrawLine(0, settings::TABSIZE.y, settings::PARTING, settings::TABSIZE.y, WHITE);
 		for (int i = 0; i < fractalNumber; i++)
 		{
 			Color tabColor = settings::BG_COLOR_2;
@@ -98,12 +103,19 @@ int main()
 			{
 				tabColor = GRAY;
 			}
+			else if (i == currentFractal)
+			{
+				tabColor = settings::BG_COLOR;
+			}
+			
 			DrawRectangle(i * settings::TABSIZE.x, 0, settings::TABSIZE.x, settings::TABSIZE.y, tabColor);
 			DrawLine((i + 1) * settings::TABSIZE.x, 0, (i + 1) * settings::TABSIZE.x, settings::TABSIZE.y, WHITE);
 			std::string name = fractals[i].GetName();
 			Vector2 measureName = MeasureTextEx(font, name.c_str(), settings::FONT_SIZE_2, settings::FONT_SPACING);
 			DrawTextEx(font, name.c_str(), {(float)(0.5 + i) * settings::TABSIZE.x - measureName.x / 2.0f, settings::TABSIZE.y / 2.0f - measureName.y / 2.0f}, settings::FONT_SIZE_2, settings::FONT_SPACING, WHITE);
 		}
+		DrawLine(0, settings::TABSIZE.y, currentFractal * settings::TABSIZE.x, settings::TABSIZE.y, WHITE);
+		DrawLine(currentFractal * settings::TABSIZE.x + settings::TABSIZE.x, settings::TABSIZE.y, settings::PARTING, settings::TABSIZE.y, WHITE);
 
 		DrawLine(settings::PARTING, 0, settings::PARTING, GetScreenHeight(), WHITE);
 		DrawRectangle(settings::PARTING, 0, GetScreenWidth() - settings::PARTING, GetScreenHeight(), settings::BG_COLOR_2);
@@ -111,6 +123,11 @@ int main()
 		for (auto &slider : fractals[currentFractal].sliders)
 		{
 			slider.Render(font);
+		}
+
+		for (auto &switch_ : fractals[currentFractal].switches)
+		{
+			switch_.Render(font, GetYSwitchOffset(currentFractal));
 		}
 
 		std::string hints = "Press STRG + R\nto re-plot the graph!\n\nPress STRG + S\nto save the image!";
@@ -141,4 +158,9 @@ void Init()
 	SetExitKey(0);
 	ChangeDirectory(GetApplicationDirectory());
 	SetTargetFPS(120);
+}
+
+float GetYSwitchOffset(int currentFractal)
+{
+	return fractals[currentFractal].sliders.size() * Slider::ySize;
 }

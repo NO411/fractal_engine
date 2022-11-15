@@ -29,6 +29,8 @@ private:
 	int linkedSlider;
 
 public:
+	static const float ySize;
+
 	Slider();
 	Slider(int number, std::string name, long double min, long double max, long double *setConstant, long double initVar, int linkedSlider, bool int_);
 
@@ -46,6 +48,8 @@ public:
 	int GetNumber();
 };
 
+const float Slider::ySize = 80;
+
 const int Slider::length = 150;
 const int Slider::textDist = 5;
 const int Slider::dragRadius = 8;
@@ -58,7 +62,7 @@ Slider::Slider(int number, std::string name, long double min, long double max, l
 	: name(name), min(min), max(max), setConstant(setConstant), value(initVar), linkedSlider(linkedSlider), number(number), int_(int_)
 {
 	sliderPercentage = (initVar - min) / (max - min);
-	pos = {settings::PARTING + 50, (float)50 + (number - 1) * 80};
+	pos = {settings::PARTING + 50, (float)50 + (number - 1) * ySize};
 	UpdateValue();
 }
 

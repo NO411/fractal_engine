@@ -16,12 +16,18 @@ namespace mandelbrot
 	number RE_MIN = -2; // x-axis
 	number RE_MAX = 1;
 
+	bool RENDER_SURROUNDING = true;
+
 	std::vector<Slider> sliders = {
 		{1, "min y (im)", -1, 1, &IM_MIN, IM_MIN, 0, false},
 		{2, "max y (im)", -1, 1, &IM_MAX, IM_MAX, 1, false},
 		{3, "min x (re)", -2, 1, &RE_MIN, RE_MIN, 0, false},
 		{4, "max x (re)", -2, 1, &RE_MAX, RE_MAX, 3, false},
 		{5, "max iterations", 0, 500, &ITERATIONS_MAX, ITERATIONS_MAX, 0, true},
+	};
+
+	std::vector<Switch> switches = {
+		{1, "render surrounding", &RENDER_SURROUNDING, RENDER_SURROUNDING},
 	};
 
 	int currentPixel = 0;
@@ -132,7 +138,7 @@ namespace mandelbrot
 		{
 			DrawPixelV({(float)c.xImage, (float)c.yImage}, settings::DEFAULT_COLOR);
 		}
-		else
+		else if (RENDER_SURROUNDING)
 		{
 			DrawPixelV({(float)c.xImage, (float)c.yImage}, {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, (unsigned char)(iterations * 2)});
 		}
@@ -162,5 +168,5 @@ namespace mandelbrot
 	}
 
 	// this passes the fractal to the main program
-	Fractal fractal("Mandelbrot", sliders, RenderAdditional, Update, Reset);
+	Fractal fractal("Mandelbrot", sliders, switches, RenderAdditional, Update, Reset);
 }

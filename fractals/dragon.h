@@ -3,11 +3,21 @@
 
 namespace dragon
 {
-	long double FOLDS = 1;
+	long double FOLDS = 10;
+	long double WAIT = 0.5;
+
 	int nFolds = 1;
+	long double nWait = 0;
+
+	bool RENDER_OLD_LINES = false;
 
 	std::vector<Slider> sliders = {
 		{1, "folds", 1, 22, &FOLDS, FOLDS, 0, true},
+		{2, "wait (in seconds)", 0, 6, &WAIT, WAIT, 0, false},
+	};
+
+	std::vector<Switch> switches = {
+		{1, "render old lines", &RENDER_OLD_LINES, RENDER_OLD_LINES},
 	};
 
 	int squareSideLength = settings::IMAGE_WIDTH - 400; // 200 dist per side
@@ -19,6 +29,7 @@ namespace dragon
 	};
 
 	std::vector<Vector2> startPoints = points;
+	std::vector<Vector2> oldPoints;
 
 	void RenderAdditional(Texture2D &texture, Font &font)
 	{
@@ -40,6 +51,14 @@ namespace dragon
 		{
 			return;
 		}
+
+		// wait iterating for `WAIT` seconds
+		nWait += GetFrameTime();
+		if (nWait < WAIT && nFolds != 1)
+		{
+			return;
+		}
+		nWait = 0;
 
 		std::vector<Vector2> newPoints;
 
@@ -113,11 +132,23 @@ namespace dragon
 		points = newPoints;
 
 		Vector2* pointsArray = &points[0];
+		Vector2* oldPointsArray = &oldPoints[0];
 
 		BeginTextureMode(canvas);
+		BeginBlendMode(BLEND_ADDITIVE);
 		ClearBackground(settings::BG_COLOR);
+
+		if (RENDER_OLD_LINES && oldPoints.size() != 0 && nFolds > 1)
+		{
+			DrawLineStrip(oldPointsArray, oldPoints.size(), {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, 20});
+		}
+
 		DrawLineStrip(pointsArray, points.size(), settings::DEFAULT_COLOR);
+		EndBlendMode();
 		EndTextureMode();
+
+		oldPoints = points;
+
 		nFolds++;
 	}
 
@@ -127,5 +158,5 @@ namespace dragon
 		points = startPoints;
 	}
 
-	Fractal fractal("Dragon", sliders, RenderAdditional, Update, Reset);
+	Fractal fractal("Dragon", sliders, switches, RenderAdditional, Update, Reset);
 }

@@ -11,6 +11,9 @@ namespace settings
 	constexpr int IMAGE_HEIGHT = 600;
 	constexpr Vector2 DRAW_OFFSET = {80, 80};
 
+	constexpr int MIN_ORIG_WINDOW_WIDTH = settings::IMAGE_WIDTH + 395;
+	constexpr int MIN_ORIG_WINDOW_HEIGHT = settings::IMAGE_HEIGHT + settings::DRAW_OFFSET.y * 2;
+
 	constexpr Color BG_COLOR = {20, 40, 50, 255};
 	constexpr Color BG_COLOR_2 = {10, 30, 40, 255};
 	constexpr Color DEFAULT_COLOR = {0, 255, 255, 255};

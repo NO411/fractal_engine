@@ -15,7 +15,7 @@ namespace feigenbaum
 	const int dist = 15;
 	const float lineLength = 10;
 
-	void RenderAdditional(Texture2D &texture, Font &font)
+	void RenderAdditional(Texture2D &texture, Font &font, Camera2D &cam)
 	{
 		if (currentPixel <= texture.width)
 		{

@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "slider.h"
 #include "switch.h"
+#include "misc.h"
 #include <vector>
 #include <string>
 #include <functional>
@@ -21,11 +22,11 @@ public:
 	std::vector<Slider> sliders;
 	std::vector<Switch> switches;
 
-	std::function<void(Texture2D &texture, Font &font)> RenderAdditional;
+	std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional;
 	std::function<void(RenderTexture2D &canvas)> Update;
 	std::function<void()> Reset;
 
-	Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, std::function<void(Texture2D &texture, Font &font)> RenderAdditional, std::function<void(RenderTexture2D &canvas)> Update, std::function<void()> Reset);
+	Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional, std::function<void(RenderTexture2D &canvas)> Update, std::function<void()> Reset);
 
 	void SetConstants();
 	bool IsInitialized();
@@ -37,7 +38,7 @@ public:
 	int GetSliderPos(int number);
 };
 
-Fractal::Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, std::function<void(Texture2D &texture, Font &font)> RenderAdditional, std::function<void(RenderTexture2D &canvas)> Update, std::function<void()> Reset)
+Fractal::Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional, std::function<void(RenderTexture2D &canvas)> Update, std::function<void()> Reset)
 	: name(name), sliders(sliders), switches(switches),RenderAdditional(RenderAdditional), Update(Update), Reset(Reset)
 {
 	// init, then save fractal in global vector

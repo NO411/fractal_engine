@@ -1,8 +1,9 @@
 #pragma once
 
 #include "raylib.h"
-#include <string>
 #include "settings.h"
+#include "misc.h"
+#include <string>
 
 class Switch
 {
@@ -24,9 +25,9 @@ public:
 	Switch(int number, std::string name, bool *setConstant, bool initVar);
 
 	void Render(Font &font, int yOffset);
-	bool Selected(float yOffset);
+	bool Selected(float yOffset, Camera2D &cam);
 	void SetConstant();
-	void Update(float yOffset);
+	void Update(float yOffset, Camera2D &cam);
 	bool GetValue();
 };
 
@@ -65,9 +66,9 @@ void Switch::Render(Font &font, int yOffset)
 	DrawTextEx(font, name.c_str(), {pos.x, pos.y + yOffset - textDist - MeasureTextEx(font, name.c_str(), settings::FONT_SIZE_2, settings::FONT_SPACING).y}, settings::FONT_SIZE_2, settings::FONT_SPACING, GRAY);
 }
 
-bool Switch::Selected(float yOffset)
+bool Switch::Selected(float yOffset, Camera2D &cam)
 {
-	return CheckCollisionPointRec(GetMousePosition(), {box.x, yOffset + box.y, box.width, box.height});
+	return CheckCollisionPointRec(GetMousePositionScaled(cam), {box.x, yOffset + box.y, box.width, box.height});
 }
 
 void Switch::SetConstant()
@@ -75,10 +76,10 @@ void Switch::SetConstant()
 	*setConstant = GetValue();
 }
 
-void Switch::Update(float yOffset)
+void Switch::Update(float yOffset, Camera2D &cam)
 {
 	selected = false;
-	if (!Selected(yOffset))
+	if (!Selected(yOffset, cam))
 	{
 		return;
 	}

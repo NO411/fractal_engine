@@ -71,6 +71,7 @@ Or just follow this [tutorial](https://www.youtube.com/watch?v=HPDLTQ4J_zQ).
 ## Make your own fractal
 
 All Raylib functions available.
+Use `GetMousePositionScaled(Camera2D &cam)` to get the mouse position (the window is scaled to the screen).
 
 Template `name.h`:
 ```

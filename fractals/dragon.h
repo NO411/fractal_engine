@@ -31,7 +31,7 @@ namespace dragon
 	std::vector<Vector2> startPoints = points;
 	std::vector<Vector2> oldPoints;
 
-	void RenderAdditional(Texture2D &texture, Font &font)
+	void RenderAdditional(Texture2D &texture, Font &font, Camera2D &cam)
 	{
 		DrawTextEx(font, ("folds: " + std::to_string(nFolds - 1)).c_str(), {settings::DRAW_OFFSET.x, settings::DRAW_OFFSET.y + settings::IMAGE_HEIGHT + 5}, settings::FONT_SIZE_2, settings::FONT_SPACING, WHITE);
 	}

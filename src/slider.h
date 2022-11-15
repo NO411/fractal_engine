@@ -1,8 +1,9 @@
 #pragma once
 
 #include "raylib.h"
-#include <string>
 #include "settings.h"
+#include "misc.h"
+#include <string>
 
 class Slider
 {
@@ -36,10 +37,10 @@ public:
 
 	std::string DoubleToString(long double n);
 	void Render(Font &font);
-	bool Selected();
+	bool Selected(Camera2D &cam);
 	void SetConstant();
 	void UpdateValue();
-	void Update();
+	void Update(Camera2D &cam);
 	long double GetValue();
 
 	void SetMin(long double m);
@@ -108,9 +109,9 @@ void Slider::Render(Font &font)
 	DrawTextEx(font, valueString.c_str(), {pos.x + sliderPercentage * length - MeasureText(valueString.c_str(), settings::FONT_SIZE) / 2, pos.y + (dragRadius + textDist)}, settings::FONT_SIZE, settings::FONT_SPACING, WHITE);
 }
 
-bool Slider::Selected()
+bool Slider::Selected(Camera2D &cam)
 {
-	return CheckCollisionPointCircle(GetMousePosition(), {pos.x + length * sliderPercentage, pos.y}, dragRadius);
+	return CheckCollisionPointCircle(GetMousePositionScaled(cam), {pos.x + length * sliderPercentage, pos.y}, dragRadius);
 }
 
 void Slider::SetConstant()
@@ -123,9 +124,9 @@ void Slider::UpdateValue()
 	value = sliderPercentage * (max - min) + min;
 }
 
-void Slider::Update()
+void Slider::Update(Camera2D &cam)
 {
-	if (IsMouseButtonPressed(0) && Selected())
+	if (IsMouseButtonPressed(0) && Selected(cam))
 	{
 		moving = true;
 	}
@@ -137,7 +138,7 @@ void Slider::Update()
 
 	if (moving)
 	{
-		sliderPercentage = (GetMouseX() - pos.x) / length;
+		sliderPercentage = (GetMousePositionScaled(cam).x - pos.x) / length;
 		if (sliderPercentage < 0)
 		{
 			sliderPercentage = 0;

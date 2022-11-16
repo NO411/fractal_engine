@@ -10,15 +10,19 @@ namespace dragon
 	long double nWait = 0;
 
 	bool RENDER_OLD_LINES = false;
+	long double ALPHA_OLD_LINES = 20;
 
 	std::vector<Slider> sliders = {
 		{1, "folds", 1, 22, &FOLDS, FOLDS, 0, true},
-		{2, "wait (in seconds)", 0, 6, &WAIT, WAIT, 0, false},
+		{2, "wait (in seconds)", 0, 5, &WAIT, WAIT, 0, false},
+		{3, "old lines aplha", 0, 255, &ALPHA_OLD_LINES, ALPHA_OLD_LINES, 0, true},
 	};
 
 	std::vector<Switch> switches = {
 		{1, "render old lines", &RENDER_OLD_LINES, RENDER_OLD_LINES},
 	};
+
+	CoordinateSystem coordinate_system;
 
 	int squareSideLength = settings::IMAGE_WIDTH - 400; // 200 dist per side
 	Vector2 startCorner = {settings::IMAGE_WIDTH / 2.0f, settings::IMAGE_HEIGHT - 110};
@@ -140,7 +144,7 @@ namespace dragon
 		{
 			for (size_t i = 0; i < oldPoints.size() - 1; i++)
 			{
-				DrawLineEx(oldPoints[i], oldPoints[i + 1], 1, {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, 20});
+				DrawLineEx(oldPoints[i], oldPoints[i + 1], 1, {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, (unsigned char)ALPHA_OLD_LINES});
 			}
 		}
 
@@ -162,5 +166,5 @@ namespace dragon
 		points = startPoints;
 	}
 
-	Fractal fractal("Dragon", sliders, switches, RenderAdditional, Update, Reset);
+	Fractal fractal("Dragon", sliders, switches, coordinate_system, RenderAdditional, Update, Reset);
 }

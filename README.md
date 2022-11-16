@@ -1,6 +1,12 @@
 # Fractal Engine
 Made with Raylib.
 
+Installed fractals:
+- Dragon curve
+- Mandelbrot set
+- Bifurcation diagram
+- Buddhabrot
+
 <p float="left">
   <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Dragon/Dragon_0.png?raw=true" width="300" />
   <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Mandelbrot/Mandelbrot_0.png" width="300" />

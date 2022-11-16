@@ -81,34 +81,39 @@ Template `name.h`:
 namespace name
 {
     // constants / variables here
+
     std::vector<Slider> sliders = {
         // sliders depending on variables above
-    };
+	};
 
-    void RenderAdditional(Texture2D &texture, Font &font)
-    {
+	std::vector<Switch> switches = {
+        // switches depending on variables above
+	};
+
+	CoordinateSystem coordinate_system;
+
+	void RenderAdditional(Texture2D &texture, Font &font, Camera2D &cam)
+	{
         // draw to hole screen
-    }
+	}
 
-    void Update(RenderTexture2D &canvas)
-    {
+	void Update(RenderTexture2D &canvas)
+	{
         // iterate and draw to canvas.texture
-    }
+	}
 
-    void Reset()
-    {
+	void Reset()
+	{
         // called when STRG + R is pressed
-    }
+	}
 
-    // this passes the fractal to the main program
-    Fractal fractal("name", sliders, RenderAdditional, Update, Reset);
+	// this passes the fractal to the main program
+	Fractal fractal("name", sliders, switches, coordinate_system, RenderAdditional, Update, Reset);
 }
-
 ```
 - move the created header file to `fractal_engine/fractals`
 - add include to `fractal_engine/src/main.cpp`, e.g. `#include "../fractals/name.h"`
 - recompile with installation command
 
 ## TODO:
-- [ ] coordinate system api
 - [ ] autozoom box

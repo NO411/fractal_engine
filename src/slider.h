@@ -15,6 +15,7 @@ private:
 	Vector2 pos;
 	float sliderPercentage;
 
+	int number;
 	std::string name;
 
 	long double min;
@@ -24,10 +25,10 @@ private:
 	long double value;
 
 	bool moving = false;
-	bool int_ = false;
 
-	int number;
 	int linkedSlider;
+
+	bool int_ = false;
 
 public:
 	static const float ySize;
@@ -60,7 +61,7 @@ Slider::Slider()
 }
 
 Slider::Slider(int number, std::string name, long double min, long double max, long double *setConstant, long double initVar, int linkedSlider, bool int_)
-	: name(name), min(min), max(max), setConstant(setConstant), value(initVar), linkedSlider(linkedSlider), number(number), int_(int_)
+	: number(number), name(name), min(min), max(max), setConstant(setConstant), value(initVar), linkedSlider(linkedSlider), int_(int_)
 {
 	sliderPercentage = (initVar - min) / (max - min);
 	pos = {settings::PARTING + 50, (float)50 + (number - 1) * ySize};

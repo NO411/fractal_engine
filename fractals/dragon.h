@@ -132,19 +132,22 @@ namespace dragon
 
 		points = newPoints;
 
-		Vector2* pointsArray = &points[0];
-		Vector2* oldPointsArray = &oldPoints[0];
-
 		BeginTextureMode(canvas);
 		BeginBlendMode(BLEND_ADDITIVE);
 		ClearBackground(settings::BG_COLOR);
 
 		if (RENDER_OLD_LINES && oldPoints.size() != 0 && nFolds > 1)
 		{
-			DrawLineStrip(oldPointsArray, oldPoints.size(), {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, 20});
+			for (size_t i = 0; i < oldPoints.size() - 1; i++)
+			{
+				DrawLineEx(oldPoints[i], oldPoints[i + 1], 1, {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, 20});
+			}
 		}
 
-		DrawLineStrip(pointsArray, points.size(), settings::DEFAULT_COLOR);
+		for (size_t i = 0; i < points.size() - 1; i++)
+		{
+			DrawLineEx(points[i], points[i + 1], 1, settings::DEFAULT_COLOR);
+		}
 		EndBlendMode();
 		EndTextureMode();
 

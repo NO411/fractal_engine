@@ -160,7 +160,7 @@ namespace dragon
 		nFolds++;
 	}
 
-	void Reset()
+	void Reset(RenderTexture2D &canvas)
 	{
 		nFolds = 1;
 		points = startPoints;

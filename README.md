@@ -117,3 +117,4 @@ namespace name
 
 ## TODO:
 - [ ] autozoom box
+- [ ] only save file when it doesnt already exist

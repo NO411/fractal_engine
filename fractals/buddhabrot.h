@@ -8,7 +8,7 @@ namespace buddhabrot
 {
 #define number long double
 
-	number ITERATIONS_MAX = 2000;
+	number ITERATIONS_MAX = 15000;
 
 	// imaginärer Anteil von c
 	number IM_MIN = -1; // y-axis
@@ -23,18 +23,15 @@ namespace buddhabrot
 		{2, "max y (im)", -1, 1, &IM_MAX, IM_MAX, 1, false},
 		{3, "min x (re)", -2, 1, &RE_MIN, RE_MIN, 0, false},
 		{4, "max x (re)", -2, 1, &RE_MAX, RE_MAX, 3, false},
-		{5, "max iterations", 0, 500, &ITERATIONS_MAX, ITERATIONS_MAX, 0, true},
+		{5, "max iterations", 0, 20000, &ITERATIONS_MAX, ITERATIONS_MAX, 0, true},
 	};
 
 	std::vector<Switch> switches = {
 	};
 
 	CoordinateSystem coordinate_system = {"re", "im", 5, &RE_MIN, &RE_MAX, &IM_MIN, &IM_MAX};
-	
-	std::map<int, std::map<int, int>> counters;
 
 	int currentPixel = 0;
-	bool rendered = false;
 
 	class ComplexNumber
 	{
@@ -86,7 +83,7 @@ namespace buddhabrot
 			DrawLine(settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y, settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y + texture.height, {255, 255, 255, 50});
 		}
 	}
-	int currentw = 0;
+
 	void Iterate(RenderTexture2D &canvas, ComplexNumber c, int currentPixel, int y, bool diverged)
 	{
 		ComplexNumber z(0.0L, 0.0L);
@@ -99,14 +96,12 @@ namespace buddhabrot
 			}
 
 			z = z.Pow() + c;
-		currentw++;
 
 			if (diverged)
 			{
-				counters[z.GetXImage()][z.GetYImage()]++;
 				BeginTextureMode(canvas);
 				BeginBlendMode(BLEND_ADDITIVE);
-				DrawPixelV({(float)z.GetXImage(), (float)z.GetYImage()}, {0, 255, 255, 2});
+				DrawPixelV({(float)z.GetXImage(), (float)z.GetYImage()}, {100, 100, 200, 5});
 				EndBlendMode();
 				EndTextureMode();
 			}
@@ -129,26 +124,14 @@ namespace buddhabrot
 			}
 			currentPixel++;
 		}
-		else
-		{
-			if (!rendered)
-			{
-				rendered = true;
-				for (int x = 0; x <= settings::IMAGE_WIDTH; x++)
-				{
-					for (int y = 0; y <= settings::IMAGE_HEIGHT; y++)
-					{
-						
-					}
-				}
-			}
-		}
 	}
 
-	void Reset()
+	void Reset(RenderTexture2D &canvas)
 	{
 		currentPixel = 0;
-		rendered = false;
+		BeginTextureMode(canvas);
+		ClearBackground(BLACK);
+		EndTextureMode();
 	}
 
 	// this passes the fractal to the main program

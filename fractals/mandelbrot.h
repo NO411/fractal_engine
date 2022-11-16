@@ -120,7 +120,7 @@ namespace mandelbrot
 		}
 	}
 
-	void Reset()
+	void Reset(RenderTexture2D &canvas)
 	{
 		currentPixel = 0;
 	}

@@ -28,9 +28,9 @@ public:
 
 	std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional;
 	std::function<void(RenderTexture2D &canvas)> Update;
-	std::function<void()> Reset;
+	std::function<void(RenderTexture2D &canvas)> Reset;
 
-	Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, CoordinateSystem coordinate_system, std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional, std::function<void(RenderTexture2D &canvas)> Update, std::function<void()> Reset);
+	Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, CoordinateSystem coordinate_system, std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional, std::function<void(RenderTexture2D &canvas)> Update, std::function<void(RenderTexture2D &canvas)> Reset);
 
 	void SetConstants();
 	bool IsInitialized();
@@ -45,7 +45,7 @@ public:
 	void MainUpdate(Camera2D &cam);
 };
 
-Fractal::Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, CoordinateSystem coordinate_system, std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional, std::function<void(RenderTexture2D &canvas)> Update, std::function<void()> Reset)
+Fractal::Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, CoordinateSystem coordinate_system, std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional, std::function<void(RenderTexture2D &canvas)> Update, std::function<void(RenderTexture2D &canvas)> Reset)
 	: name(name), sliders(sliders), switches(switches), coordinate_system(coordinate_system), RenderAdditional(RenderAdditional), Update(Update), Reset(Reset)
 {
 	// init, then save fractal in global vector
@@ -80,7 +80,7 @@ void Fractal::Clear()
 	ClearBackground(settings::BG_COLOR);
 	EndTextureMode();
 	SetConstants();
-	Reset();
+	Reset(canvas);
 	initialized = true;
 }
 

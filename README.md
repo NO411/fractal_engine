@@ -80,31 +80,31 @@ Template `name.h`:
 
 namespace name
 {
-    // constants / variables here
+	// constants / variables here
 
-    std::vector<Slider> sliders = {
-        // sliders depending on variables above
+	std::vector<Slider> sliders = {
+		// sliders depending on variables above
 	};
 
 	std::vector<Switch> switches = {
-        // switches depending on variables above
+		// switches depending on variables above
 	};
 
 	CoordinateSystem coordinate_system;
 
 	void RenderAdditional(Texture2D &texture, Font &font, Camera2D &cam)
 	{
-        // draw to hole screen
+		// draw to hole screen
 	}
 
 	void Update(RenderTexture2D &canvas)
 	{
-        // iterate and draw to canvas.texture
+		// iterate and draw to canvas.texture
 	}
 
 	void Reset()
 	{
-        // called when STRG + R is pressed
+		// called when STRG + R is pressed
 	}
 
 	// this passes the fractal to the main program

@@ -140,7 +140,6 @@ void Fractal::Render(Font &font, Camera2D &cam)
 
 void Fractal::MainUpdate(Camera2D &cam)
 {
-	std::cout << switchYOffset << std::endl;
 	Update(canvas);
 
 	for (auto &slider : sliders)

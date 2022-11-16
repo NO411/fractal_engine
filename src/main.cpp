@@ -14,7 +14,7 @@
 #include "../fractals/dragon.h"
 
 void Render(Camera2D &cam, Font &font, int fractalNumber, int selectedTab, int currentFractal);
-int UpdateSlectedTab(Camera2D &cam, int fractalNumber, int currentFractal);
+int UpdateSlectedTab(Camera2D &cam, int fractalNumber, int *currentFractal);
 float UpdateZoom();
 void UpdateWindowTitle(int currentFractal);
 
@@ -60,7 +60,7 @@ int main()
 
 		fractals[currentFractal].MainUpdate(cam);
 
-		selectedTab = UpdateSlectedTab(cam, fractalNumber, currentFractal);
+		selectedTab = UpdateSlectedTab(cam, fractalNumber, &currentFractal);
 
 		BeginDrawing();
 		BeginMode2D(cam);
@@ -119,7 +119,7 @@ void Render(Camera2D &cam, Font &font, int fractalNumber, int selectedTab, int c
 
 }
 
-int UpdateSlectedTab(Camera2D &cam, int fractalNumber, int currentFractal)
+int UpdateSlectedTab(Camera2D &cam, int fractalNumber, int *currentFractal)
 {
 	int ret = 0;
 	for (int i = 0; i < fractalNumber; i++)
@@ -129,12 +129,12 @@ int UpdateSlectedTab(Camera2D &cam, int fractalNumber, int currentFractal)
 			ret = i + 1;
 			if (IsMouseButtonPressed(0))
 			{
-				currentFractal = i;
-				UpdateWindowTitle(currentFractal);
+				*currentFractal = i;
+				UpdateWindowTitle(*currentFractal);
 
-				if (!fractals[currentFractal].IsInitialized())
+				if (!fractals[*currentFractal].IsInitialized())
 				{
-					fractals[currentFractal].Clear();
+					fractals[*currentFractal].Clear();
 				}
 			}
 			break;

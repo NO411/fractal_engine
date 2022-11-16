@@ -130,14 +130,14 @@ int main()
 			}
 			
 			DrawRectangle(i * settings::TABSIZE.x, 0, settings::TABSIZE.x, settings::TABSIZE.y, tabColor);
-			DrawLine((i + 1) * settings::TABSIZE.x - 0.5, 0, (i + 1) * settings::TABSIZE.x - 0.5, settings::TABSIZE.y, WHITE);
+			DrawLine((i + 1) * settings::TABSIZE.x - 1, 0, (i + 1) * settings::TABSIZE.x - 1, settings::TABSIZE.y, WHITE);
 			std::string name = fractals[i].GetName();
 			Vector2 measureName = MeasureTextEx(font, name.c_str(), settings::FONT_SIZE_2, settings::FONT_SPACING);
 			DrawTextEx(font, name.c_str(), {(float)(0.5 + i) * settings::TABSIZE.x - measureName.x / 2.0f, settings::TABSIZE.y / 2.0f - measureName.y / 2.0f}, settings::FONT_SIZE_2, settings::FONT_SPACING, WHITE);
 		}
 
-		DrawLine(0, settings::TABSIZE.y - 1, currentFractal * settings::TABSIZE.x, settings::TABSIZE.y, WHITE);
-		DrawLine(currentFractal * settings::TABSIZE.x + settings::TABSIZE.x - 1, settings::TABSIZE.y, settings::PARTING, settings::TABSIZE.y, WHITE);
+		DrawLine(0, settings::TABSIZE.y, currentFractal * settings::TABSIZE.x - 0.5, settings::TABSIZE.y, WHITE);
+		DrawLine(currentFractal * settings::TABSIZE.x + settings::TABSIZE.x - 1.5, settings::TABSIZE.y, settings::PARTING, settings::TABSIZE.y, WHITE);
 
 		DrawRectangle(settings::PARTING, 0, GetScreenWidth() / cam.zoom - settings::PARTING, GetScreenHeight() / cam.zoom, settings::BG_COLOR_2);
 		DrawLine(settings::PARTING, 0, settings::PARTING, GetScreenHeight() / cam.zoom, WHITE);

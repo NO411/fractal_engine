@@ -112,3 +112,4 @@ namespace name
 ## TODO:
 - [ ] coordinate system api
 - [ ] autozoom box
+- [ ] dragon bug on windows, maybe there is a limit on how many points can be connected by one line

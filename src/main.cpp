@@ -12,6 +12,7 @@
 #include "../fractals/feigenbaum.h"
 #include "../fractals/mandelbrot.h"
 #include "../fractals/dragon.h"
+#include "../fractals/buddhabrot.h"
 
 void Render(Camera2D &cam, Font &font, int fractalNumber, int selectedTab, int currentFractal);
 int UpdateSlectedTab(Camera2D &cam, int fractalNumber, int *currentFractal);

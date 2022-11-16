@@ -14,11 +14,6 @@ namespace feigenbaum
 	long double PLOT_VALUES = 1000;
 
 	int currentPixel = 0;
-
-	// coordinate system
-	const int dist = 15;
-	const float lineLength = 10;
-
 	CoordinateSystem coordinate_system = {"a", "x", 5, &MIN_A, &MAX_A, &MIN_X, &MAX_X};
 
 	void RenderAdditional(Texture2D &texture, Font &font, Camera2D &cam)

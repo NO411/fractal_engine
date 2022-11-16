@@ -1,12 +1,14 @@
 #pragma once
 #include "../src/fractal.h"
 #include <cmath>
+#include <map>
+#include <iostream>
 
-namespace mandelbrot
+namespace buddhabrot
 {
 #define number long double
 
-	number ITERATIONS_MAX = 500;
+	number ITERATIONS_MAX = 2000;
 
 	// imaginärer Anteil von c
 	number IM_MIN = -1; // y-axis
@@ -15,8 +17,6 @@ namespace mandelbrot
 	// reeller Anteil von c
 	number RE_MIN = -2; // x-axis
 	number RE_MAX = 1;
-
-	bool RENDER_SURROUNDING = true;
 
 	std::vector<Slider> sliders = {
 		{1, "min y (im)", -1, 1, &IM_MIN, IM_MIN, 0, false},
@@ -27,12 +27,14 @@ namespace mandelbrot
 	};
 
 	std::vector<Switch> switches = {
-		{1, "render surrounding", &RENDER_SURROUNDING, RENDER_SURROUNDING},
 	};
 
 	CoordinateSystem coordinate_system = {"re", "im", 5, &RE_MIN, &RE_MAX, &IM_MIN, &IM_MAX};
+	
+	std::map<int, std::map<int, int>> counters;
 
 	int currentPixel = 0;
+	bool rendered = false;
 
 	class ComplexNumber
 	{
@@ -52,6 +54,16 @@ namespace mandelbrot
 		{
 			re = RE_MIN + xImage / (number)settings::IMAGE_WIDTH * (RE_MAX - RE_MIN);
 			im = IM_MIN + yImage / (number)settings::IMAGE_HEIGHT * (IM_MAX - IM_MIN);
+		}
+
+		int GetXImage()
+		{
+			return (int)((re - RE_MIN) * settings::IMAGE_WIDTH / (RE_MAX - RE_MIN));
+		}
+
+		int GetYImage()
+		{
+			return (int)((im - IM_MIN) * settings::IMAGE_HEIGHT / (IM_MAX - IM_MIN));
 		}
 
 		ComplexNumber Pow()
@@ -74,48 +86,61 @@ namespace mandelbrot
 			DrawLine(settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y, settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y + texture.height, {255, 255, 255, 50});
 		}
 	}
-
-	void Iterate(RenderTexture2D &canvas, ComplexNumber c)
+	int currentw = 0;
+	void Iterate(RenderTexture2D &canvas, ComplexNumber c, int currentPixel, int y, bool diverged)
 	{
 		ComplexNumber z(0.0L, 0.0L);
-
 		int iterations;
 		for (iterations = 0; iterations <= ITERATIONS_MAX; iterations++)
 		{
 			if (pow(z.im, 2) + pow(z.re, 2) > 4)
 			{
-				break;
+				break; // diverged
 			}
 
 			z = z.Pow() + c;
+		currentw++;
+
+			if (diverged)
+			{
+				counters[z.GetXImage()][z.GetYImage()]++;
+				BeginTextureMode(canvas);
+				BeginBlendMode(BLEND_ADDITIVE);
+				DrawPixelV({(float)z.GetXImage(), (float)z.GetYImage()}, {0, 255, 255, 2});
+				EndBlendMode();
+				EndTextureMode();
+			}
 		}
 
-		BeginTextureMode(canvas);
-		BeginBlendMode(BLEND_ADDITIVE);
-		if (iterations >= ITERATIONS_MAX)
+		if (iterations < ITERATIONS_MAX && !diverged)
 		{
-			DrawPixelV({(float)c.xImage, (float)c.yImage}, settings::DEFAULT_COLOR);
+			Iterate(canvas, c, currentPixel, y, true);
 		}
-		else if (RENDER_SURROUNDING)
-		{
-			DrawPixelV({(float)c.xImage, (float)c.yImage}, {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, (unsigned char)(iterations * 2)});
-		}
-		EndBlendMode();
-		EndTextureMode();
 	}
 
 	void Update(RenderTexture2D &canvas)
 	{
 		if (currentPixel <= settings::IMAGE_WIDTH)
 		{
-			for (int i = 0; i < 2; i++)
+			for (int y = 0; y <= settings::IMAGE_HEIGHT; y++)
 			{
-				for (int y = 0; y <= settings::IMAGE_HEIGHT; y++)
+				c = {currentPixel, y};
+				Iterate(canvas, c, currentPixel, y, false);
+			}
+			currentPixel++;
+		}
+		else
+		{
+			if (!rendered)
+			{
+				rendered = true;
+				for (int x = 0; x <= settings::IMAGE_WIDTH; x++)
 				{
-					c = {currentPixel, y};
-					Iterate(canvas, c);
+					for (int y = 0; y <= settings::IMAGE_HEIGHT; y++)
+					{
+						
+					}
 				}
-				currentPixel++;
 			}
 		}
 	}
@@ -123,8 +148,9 @@ namespace mandelbrot
 	void Reset()
 	{
 		currentPixel = 0;
+		rendered = false;
 	}
 
 	// this passes the fractal to the main program
-	Fractal fractal("Mandelbrot", sliders, switches, coordinate_system, RenderAdditional, Update, Reset);
+	Fractal fractal("Buddhabrot", sliders, switches, coordinate_system, RenderAdditional, Update, Reset);
 }

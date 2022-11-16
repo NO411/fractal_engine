@@ -12,6 +12,10 @@ Made with Raylib.
   <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Feigenbaum/Feigenbaum_1.png" width="200" />
 </p>
 
+<p float="left">
+  <img src="https://raw.githubusercontent.com/NO411/fractal_engine/main/pictures/Buddhabrot/Buddhabrot_0.png" width="600" />
+</p>
+
 ## Installation
 
 ### Linux

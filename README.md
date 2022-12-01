@@ -128,7 +128,4 @@ namespace name
 ## TODO:
 - [ ] autozoom box
 - [ ] only save file when it doesnt already exist
-<<<<<<< HEAD
 - [ ] optimize buddhabrot
-=======
->>>>>>> d326927eb6699f6af99964b8076e9130b15a4034

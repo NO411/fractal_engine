@@ -20,6 +20,7 @@ private:
 	RenderTexture2D canvas;
 
 	float switchYOffset;
+	float timer;
 
 public:
 	std::vector<Slider> sliders;
@@ -27,10 +28,10 @@ public:
 	CoordinateSystem coordinate_system;
 
 	std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional;
-	std::function<void(RenderTexture2D &canvas)> Update;
+	std::function<bool(RenderTexture2D &canvas)> Update;
 	std::function<void(RenderTexture2D &canvas)> Reset;
 
-	Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, CoordinateSystem coordinate_system, std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional, std::function<void(RenderTexture2D &canvas)> Update, std::function<void(RenderTexture2D &canvas)> Reset);
+	Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, CoordinateSystem coordinate_system, std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional, std::function<bool(RenderTexture2D &canvas)> Update, std::function<void(RenderTexture2D &canvas)> Reset);
 
 	void SetConstants();
 	bool IsInitialized();
@@ -45,7 +46,7 @@ public:
 	void MainUpdate(Camera2D &cam);
 };
 
-Fractal::Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, CoordinateSystem coordinate_system, std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional, std::function<void(RenderTexture2D &canvas)> Update, std::function<void(RenderTexture2D &canvas)> Reset)
+Fractal::Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, CoordinateSystem coordinate_system, std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional, std::function<bool(RenderTexture2D &canvas)> Update, std::function<void(RenderTexture2D &canvas)> Reset)
 	: name(name), sliders(sliders), switches(switches), coordinate_system(coordinate_system), RenderAdditional(RenderAdditional), Update(Update), Reset(Reset)
 {
 	// init, then save fractal in global vector
@@ -81,6 +82,8 @@ void Fractal::Clear()
 	EndTextureMode();
 	SetConstants();
 	Reset(canvas);
+	timer = 0;
+
 	initialized = true;
 }
 
@@ -135,12 +138,18 @@ void Fractal::Render(Font &font, Camera2D &cam)
 	{
 		switch_.Render(font, switchYOffset);
 	}
+	std::string text = "Timer: " + std::to_string(timer);
+	float yMeasureTimer = MeasureTextEx(font, text.c_str(), settings::FONT_SIZE, settings::FONT_SPACING).y;
+	DrawTextEx(font, text.c_str(), {settings::PARTING + 20, GetScreenHeight() / cam.zoom - (yMeasureTimer + 10)}, settings::FONT_SIZE, settings::FONT_SPACING, WHITE);
 	coordinate_system.Render(canvas.texture, font);
 }
 
 void Fractal::MainUpdate(Camera2D &cam)
 {
-	Update(canvas);
+	if (Update(canvas))
+	{
+		timer += GetFrameTime();
+	}
 
 	for (auto &slider : sliders)
 	{

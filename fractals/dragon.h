@@ -49,19 +49,19 @@ namespace dragon
 		return std::abs(a - b) <= __FLT_EPSILON__ * std::max(std::abs(a), std::abs(b));
 	}
 
-	void Update(RenderTexture2D &canvas)
+	bool Update(RenderTexture2D &canvas)
 	{
 		// iterate and draw to canvas.texture
 		if (nFolds > FOLDS)
 		{
-			return;
+			return false;
 		}
 
-		// wait iterating for `WAIT` seconds
+		// wait iterating for `WAIT` seconds but return true for timer
 		nWait += GetFrameTime();
 		if (nWait < WAIT && nFolds != 1)
 		{
-			return;
+			return true;
 		}
 		nWait = 0;
 
@@ -158,6 +158,7 @@ namespace dragon
 		oldPoints = points;
 
 		nFolds++;
+		return true;
 	}
 
 	void Reset(RenderTexture2D &canvas)

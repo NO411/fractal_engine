@@ -33,7 +33,7 @@ int main()
 	SetWindowSize((settings::MIN_ORIG_WINDOW_WIDTH) * cam.zoom, (settings::MIN_ORIG_WINDOW_HEIGHT) * cam.zoom);
 	SetExitKey(0);
 	ChangeDirectory(GetApplicationDirectory());
-	SetTargetFPS(120);
+	SetTargetFPS(4000);
 	//
 
 	for (auto &fractal : fractals)

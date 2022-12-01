@@ -97,12 +97,12 @@ namespace name
 		// draw to hole screen
 	}
 
-	void Update(RenderTexture2D &canvas)
+	bool Update(RenderTexture2D &canvas) // will update timer if true returned
 	{
 		// iterate and draw to canvas.texture
 	}
 
-	void Reset()
+	void Reset(RenderTexture2D &canvas)
 	{
 		// called when STRG + R is pressed
 	}
@@ -118,3 +118,4 @@ namespace name
 ## TODO:
 - [ ] autozoom box
 - [ ] only save file when it doesnt already exist
+- [ ] optimize buddhabrot

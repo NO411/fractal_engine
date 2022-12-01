@@ -1,8 +1,6 @@
 #pragma once
 #include "../src/fractal.h"
 #include <cmath>
-#include <map>
-#include <iostream>
 
 namespace buddhabrot
 {
@@ -113,7 +111,7 @@ namespace buddhabrot
 		}
 	}
 
-	void Update(RenderTexture2D &canvas)
+	bool Update(RenderTexture2D &canvas)
 	{
 		if (currentPixel <= settings::IMAGE_WIDTH)
 		{
@@ -123,7 +121,9 @@ namespace buddhabrot
 				Iterate(canvas, c, currentPixel, y, false);
 			}
 			currentPixel++;
+			return true;
 		}
+		return false;
 	}
 
 	void Reset(RenderTexture2D &canvas)

@@ -29,11 +29,11 @@ namespace feigenbaum
 		return a * xn * (1 - xn);
 	}
 
-	void Update(RenderTexture2D &canvas)
+	bool Update(RenderTexture2D &canvas)
 	{
 		if (currentPixel > canvas.texture.width)
 		{
-			return;
+			return false;
 		}
 		currentPixel++;
 
@@ -58,6 +58,7 @@ namespace feigenbaum
 				EndTextureMode();
 			}
 		}
+		return true;
 	}
 
 	void Reset(RenderTexture2D &canvas)

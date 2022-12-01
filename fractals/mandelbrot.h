@@ -104,7 +104,7 @@ namespace mandelbrot
 		EndTextureMode();
 	}
 
-	void Update(RenderTexture2D &canvas)
+	bool Update(RenderTexture2D &canvas)
 	{
 		if (currentPixel <= settings::IMAGE_WIDTH)
 		{
@@ -117,7 +117,9 @@ namespace mandelbrot
 				}
 				currentPixel++;
 			}
+			return true;
 		}
+		return false;
 	}
 
 	void Reset(RenderTexture2D &canvas)

@@ -1,6 +1,12 @@
 # Fractal Engine
 Made with Raylib.
 
+Installed fractals:
+- Dragon curve
+- Mandelbrot set
+- Bifurcation diagram
+- Buddhabrot
+
 <p float="left">
   <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Dragon/Dragon_0.png?raw=true" width="300" />
   <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Mandelbrot/Mandelbrot_0.png" width="300" />
@@ -10,6 +16,10 @@ Made with Raylib.
   <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Dragon/Dragon_1.png" width="200" />
   <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Feigenbaum/Feigenbaum_0.png" width="200" />
   <img src="https://github.com/NO411/fractal_engine/blob/main/pictures/Feigenbaum/Feigenbaum_1.png" width="200" />
+</p>
+
+<p float="left">
+  <img src="https://raw.githubusercontent.com/NO411/fractal_engine/main/pictures/Buddhabrot/Buddhabrot_0.png" width="600" />
 </p>
 
 ## Installation
@@ -118,4 +128,7 @@ namespace name
 ## TODO:
 - [ ] autozoom box
 - [ ] only save file when it doesnt already exist
+<<<<<<< HEAD
 - [ ] optimize buddhabrot
+=======
+>>>>>>> d326927eb6699f6af99964b8076e9130b15a4034

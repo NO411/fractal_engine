@@ -102,17 +102,23 @@ namespace name
 
 	CoordinateSystem coordinate_system;
 
-	void RenderAdditional(Texture2D &texture, Font &font, Camera2D &cam)
+	void RenderAdditional(Font &font, Camera2D &cam)
 	{
 		// draw to hole screen
 	}
 
-	bool Update(RenderTexture2D &canvas) // will update timer if true returned
+	bool Update(RenderTexture2D &canvas, Image &image) // will update timer if true returned
 	{
-		// iterate and draw to canvas.texture
+		// iterate and draw to the image!
+		// only update canvas.texture if needed (see dragon.h example) using:
+		/*
+		Color *pixels = LoadImageColors(image);
+		UpdateTexture(canvas.texture, pixels);
+		UnloadImageColors(pixels);
+		*/
 	}
 
-	void Reset(RenderTexture2D &canvas)
+	void Reset(Image &image)
 	{
 		// called when STRG + R is pressed
 	}
@@ -128,4 +134,5 @@ namespace name
 ## TODO:
 - [ ] autozoom box
 - [ ] only save file when it doesnt already exist
+- [ ] optimize buddhabrot
 - [ ] optimize buddhabrot

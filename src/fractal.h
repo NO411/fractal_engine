@@ -18,6 +18,7 @@ private:
 	bool initialized = false;
 	std::string name;
 	RenderTexture2D canvas;
+	Image image;
 
 	float switchYOffset;
 	float timer;
@@ -27,11 +28,11 @@ public:
 	std::vector<Switch> switches;
 	CoordinateSystem coordinate_system;
 
-	std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional;
-	std::function<bool(RenderTexture2D &canvas)> Update;
-	std::function<void(RenderTexture2D &canvas)> Reset;
+	std::function<void(Font &font, Camera2D &cam)> RenderAdditional;
+	std::function<bool(RenderTexture2D &canvas, Image &image)> Update;
+	std::function<void(Image &image)> Reset;
 
-	Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, CoordinateSystem coordinate_system, std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional, std::function<bool(RenderTexture2D &canvas)> Update, std::function<void(RenderTexture2D &canvas)> Reset);
+	Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, CoordinateSystem coordinate_system, std::function<void(Font &font, Camera2D &cam)> RenderAdditional, std::function<bool(RenderTexture2D &canvas, Image &image)> Update, std::function<void(Image &image)> Reset);
 
 	void SetConstants();
 	bool IsInitialized();
@@ -46,7 +47,7 @@ public:
 	void MainUpdate(Camera2D &cam);
 };
 
-Fractal::Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, CoordinateSystem coordinate_system, std::function<void(Texture2D &texture, Font &font, Camera2D &cam)> RenderAdditional, std::function<bool(RenderTexture2D &canvas)> Update, std::function<void(RenderTexture2D &canvas)> Reset)
+Fractal::Fractal(std::string name, std::vector<Slider> &sliders, std::vector<Switch> &switches, CoordinateSystem coordinate_system, std::function<void(Font &font, Camera2D &cam)> RenderAdditional, std::function<bool(RenderTexture2D &canvas, Image &image)> Update, std::function<void(Image &image)> Reset)
 	: name(name), sliders(sliders), switches(switches), coordinate_system(coordinate_system), RenderAdditional(RenderAdditional), Update(Update), Reset(Reset)
 {
 	// init, then save fractal in global vector
@@ -81,7 +82,10 @@ void Fractal::Clear()
 	ClearBackground(settings::BG_COLOR);
 	EndTextureMode();
 	SetConstants();
-	Reset(canvas);
+	image = GenImageColor(settings::IMAGE_WIDTH, settings::IMAGE_HEIGHT, settings::BG_COLOR);
+	Reset(image);
+	ImageFormat(&image, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
+
 	timer = 0;
 
 	initialized = true;
@@ -125,10 +129,10 @@ int Fractal::GetSliderPos(int number)
 void Fractal::Render(Font &font, Camera2D &cam)
 {
 	SetTextureFilter(canvas.texture, TEXTURE_FILTER_BILINEAR);
-	DrawTextureEx(canvas.texture, settings::DRAW_OFFSET, 0, 1, WHITE);
+	DrawTextureRec(canvas.texture, (Rectangle){0, 0, (float)settings::IMAGE_WIDTH, (float)-settings::IMAGE_HEIGHT}, settings::DRAW_OFFSET, WHITE);
 	DrawRectangleLinesEx({settings::DRAW_OFFSET.x, settings::DRAW_OFFSET.y, settings::IMAGE_WIDTH, settings::IMAGE_HEIGHT}, 2, {255, 255, 255, 50});
 
-	RenderAdditional(canvas.texture, font, cam);
+	RenderAdditional(font, cam);
 
 	for (auto &slider : sliders)
 	{
@@ -146,9 +150,15 @@ void Fractal::Render(Font &font, Camera2D &cam)
 
 void Fractal::MainUpdate(Camera2D &cam)
 {
-	if (Update(canvas))
+	if (Update(canvas, image))
 	{
 		timer += GetFrameTime();
+	}
+	else
+	{
+		Color *pixels = LoadImageColors(image);
+		UpdateTexture(canvas.texture, pixels);
+		UnloadImageColors(pixels);
 	}
 
 	for (auto &slider : sliders)
@@ -176,4 +186,18 @@ void Fractal::MainUpdate(Camera2D &cam)
 			SaveImage();
 		}
 	}
+}
+
+Color AddColor(Color srcColor, Color color)
+{
+	return {
+		(unsigned char)(std::min((int)(srcColor.r + (color.a / 255.0f) * color.r), 255)),
+		(unsigned char)(std::min((int)(srcColor.g + (color.a / 255.0f) * color.g), 255)),
+		(unsigned char)(std::min((int)(srcColor.b + (color.a / 255.0f) * color.b), 255)),
+	255};
+}
+
+Color AddColor(Image *image, int x, int y, Color color)
+{
+	return AddColor(GetImageColor(*image, x, y), color);
 }

@@ -135,3 +135,4 @@ namespace name
 - [ ] autozoom box
 - [ ] only save file when it doesnt already exist
 - [ ] optimize buddhabrot
+- [ ] optimize buddhabrot

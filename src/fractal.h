@@ -22,6 +22,7 @@ private:
 
 	float switchYOffset;
 	float timer;
+	bool converted = false; // for rendering (from canvas to image)
 
 public:
 	std::vector<Slider> sliders;
@@ -153,12 +154,15 @@ void Fractal::MainUpdate(Camera2D &cam)
 	if (Update(canvas, image))
 	{
 		timer += GetFrameTime();
+		converted = false;
 	}
-	else
+	else if (!converted)
 	{
 		Color *pixels = LoadImageColors(image);
 		UpdateTexture(canvas.texture, pixels);
 		UnloadImageColors(pixels);
+
+		converted = true;
 	}
 
 	for (auto &slider : sliders)

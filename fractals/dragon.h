@@ -35,7 +35,7 @@ namespace dragon
 	std::vector<Vector2> startPoints = points;
 	std::vector<Vector2> oldPoints;
 
-	void RenderAdditional(Texture2D &texture, Font &font, Camera2D &cam)
+	void RenderAdditional(Font &font, Camera2D &cam)
 	{
 		DrawTextEx(font, ("folds: " + std::to_string(nFolds - 1)).c_str(), {settings::DRAW_OFFSET.x, settings::DRAW_OFFSET.y + settings::IMAGE_HEIGHT + 5}, settings::FONT_SIZE_2, settings::FONT_SPACING, WHITE);
 	}
@@ -49,7 +49,7 @@ namespace dragon
 		return std::abs(a - b) <= __FLT_EPSILON__ * std::max(std::abs(a), std::abs(b));
 	}
 
-	bool Update(RenderTexture2D &canvas)
+	bool Update(RenderTexture2D &canvas, Image &image)
 	{
 		// iterate and draw to canvas.texture
 		if (nFolds > FOLDS)
@@ -136,24 +136,23 @@ namespace dragon
 
 		points = newPoints;
 
-		BeginTextureMode(canvas);
-		BeginBlendMode(BLEND_ADDITIVE);
-		ClearBackground(settings::BG_COLOR);
-
+		image = GenImageColor(settings::IMAGE_WIDTH, settings::IMAGE_HEIGHT, settings::BG_COLOR);
 		if (RENDER_OLD_LINES && oldPoints.size() != 0 && nFolds > 1)
 		{
 			for (size_t i = 0; i < oldPoints.size() - 1; i++)
 			{
-				DrawLineEx(oldPoints[i], oldPoints[i + 1], 1, {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, (unsigned char)ALPHA_OLD_LINES});
+				ImageDrawLineV(&image, oldPoints[i], oldPoints[i + 1], AddColor(settings::BG_COLOR, ColorAlpha(settings::DEFAULT_COLOR, ALPHA_OLD_LINES / 255.0f)));
 			}
 		}
 
 		for (size_t i = 0; i < points.size() - 1; i++)
 		{
-			DrawLineEx(points[i], points[i + 1], 1, settings::DEFAULT_COLOR);
+			ImageDrawLineV(&image, points[i], points[i + 1], settings::DEFAULT_COLOR);
 		}
-		EndBlendMode();
-		EndTextureMode();
+
+		Color *pixels = LoadImageColors(image);
+		UpdateTexture(canvas.texture, pixels);
+		UnloadImageColors(pixels);
 
 		oldPoints = points;
 
@@ -161,7 +160,7 @@ namespace dragon
 		return true;
 	}
 
-	void Reset(RenderTexture2D &canvas)
+	void Reset(Image &image)
 	{
 		nFolds = 1;
 		points = startPoints;

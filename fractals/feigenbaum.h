@@ -1,5 +1,6 @@
 #pragma once
 #include "../src/fractal.h"
+#include <array>
 
 namespace feigenbaum
 {
@@ -16,11 +17,11 @@ namespace feigenbaum
 	int currentPixel = 0;
 	CoordinateSystem coordinate_system = {"a", "x", 5, &MIN_A, &MAX_A, &MIN_X, &MAX_X};
 
-	void RenderAdditional(Texture2D &texture, Font &font, Camera2D &cam)
+	void RenderAdditional(Font &font, Camera2D &cam)
 	{
-		if (currentPixel <= texture.width)
+		if (currentPixel <= settings::IMAGE_WIDTH)
 		{
-			DrawLine(settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y, settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y + texture.height, {255, 255, 255, 50});
+			DrawLine(settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y, settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y + settings::IMAGE_HEIGHT, {255, 255, 255, 50});
 		}
 	}
 
@@ -29,16 +30,16 @@ namespace feigenbaum
 		return a * xn * (1 - xn);
 	}
 
-	bool Update(RenderTexture2D &canvas)
+	bool Update(RenderTexture2D &canvas, Image &image)
 	{
-		if (currentPixel > canvas.texture.width)
+		if (currentPixel > settings::IMAGE_WIDTH)
 		{
 			return false;
 		}
 		currentPixel++;
 
 		// get a for every pixel from 0 to screen width
-		long double a = MIN_A + currentPixel / (long double)canvas.texture.width * (MAX_A - MIN_A);
+		long double a = MIN_A + currentPixel / (long double)settings::IMAGE_WIDTH * (MAX_A - MIN_A);
 		long double x = START_VALUE;
 
 		for (int i = 0; i < SETTLING_TIME + PLOT_VALUES; i++)
@@ -47,21 +48,15 @@ namespace feigenbaum
 
 			if (i > SETTLING_TIME)
 			{
-				BeginTextureMode(canvas);
-				BeginBlendMode(BLEND_ADDITIVE);
-
-				// convert y value to drawing coordinate system
-				long double y = canvas.texture.height * x;
-				DrawPixelV({(float)currentPixel, (float)y}, {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, 20});
-
-				EndBlendMode();
-				EndTextureMode();
+				int y = settings::IMAGE_HEIGHT * x;
+				ImageDrawPixel(&image, currentPixel, y, AddColor(&image, currentPixel, y, ColorAlpha(settings::DEFAULT_COLOR, 0.08)));
 			}
 		}
+		
 		return true;
 	}
 
-	void Reset(RenderTexture2D &canvas)
+	void Reset(Image &image)
 	{
 		currentPixel = 0;
 	}

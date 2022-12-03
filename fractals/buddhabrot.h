@@ -74,15 +74,15 @@ namespace buddhabrot
 
 	ComplexNumber c;
 
-	void RenderAdditional(Texture2D &texture, Font &font, Camera2D &cam)
+	void RenderAdditional(Font &font, Camera2D &cam)
 	{
-		if (currentPixel <= texture.width)
+		if (currentPixel <= settings::IMAGE_WIDTH)
 		{
-			DrawLine(settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y, settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y + texture.height, {255, 255, 255, 50});
+			DrawLine(settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y, settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y + settings::IMAGE_HEIGHT, {255, 255, 255, 50});
 		}
 	}
 
-	void Iterate(RenderTexture2D &canvas, ComplexNumber c, int currentPixel, int y, bool diverged)
+	void Iterate(Image &image, ComplexNumber c, int currentPixel, int y, bool diverged)
 	{
 		ComplexNumber z(0.0L, 0.0L);
 		int iterations;
@@ -97,28 +97,24 @@ namespace buddhabrot
 
 			if (diverged)
 			{
-				BeginTextureMode(canvas);
-				BeginBlendMode(BLEND_ADDITIVE);
-				DrawPixelV({(float)z.GetXImage(), (float)z.GetYImage()}, {100, 100, 200, 5});
-				EndBlendMode();
-				EndTextureMode();
+				ImageDrawPixel(&image, z.GetXImage(), z.GetYImage(), AddColor(&image, z.GetXImage(), z.GetYImage(), {100, 100, 200, 5}));
 			}
 		}
 
 		if (iterations < ITERATIONS_MAX && !diverged)
 		{
-			Iterate(canvas, c, currentPixel, y, true);
+			Iterate(image, c, currentPixel, y, true);
 		}
 	}
 
-	bool Update(RenderTexture2D &canvas)
+	bool Update(RenderTexture2D &canvas, Image &image)
 	{
 		if (currentPixel <= settings::IMAGE_WIDTH)
 		{
 			for (int y = 0; y <= settings::IMAGE_HEIGHT; y++)
 			{
 				c = {currentPixel, y};
-				Iterate(canvas, c, currentPixel, y, false);
+				Iterate(image, c, currentPixel, y, false);
 			}
 			currentPixel++;
 			return true;
@@ -126,12 +122,10 @@ namespace buddhabrot
 		return false;
 	}
 
-	void Reset(RenderTexture2D &canvas)
+	void Reset(Image &image)
 	{
 		currentPixel = 0;
-		BeginTextureMode(canvas);
-		ClearBackground(BLACK);
-		EndTextureMode();
+		image = GenImageColor(settings::IMAGE_WIDTH, settings::IMAGE_HEIGHT, BLACK);
 	}
 
 	// this passes the fractal to the main program

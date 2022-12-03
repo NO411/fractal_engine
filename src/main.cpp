@@ -25,12 +25,12 @@ int main()
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	SetTraceLogLevel(LOG_NONE);
 	InitWindow(settings::MIN_ORIG_WINDOW_WIDTH, settings::MIN_ORIG_WINDOW_HEIGHT, settings::PROJECT_NAME.c_str());
-	
+
 	Camera2D cam = {0};
-	cam.zoom = std::min(std::min((float)(GetMonitorWidth(GetCurrentMonitor()) - 100.0f) / (float)GetScreenWidth(), (float)(GetMonitorHeight(GetCurrentMonitor()) - 100.0f)/ (float)GetScreenHeight()), 1.0f);
-	
-	SetWindowMinSize((settings::MIN_ORIG_WINDOW_WIDTH) * cam.zoom, (settings::MIN_ORIG_WINDOW_HEIGHT) * cam.zoom);
-	SetWindowSize((settings::MIN_ORIG_WINDOW_WIDTH) * cam.zoom, (settings::MIN_ORIG_WINDOW_HEIGHT) * cam.zoom);
+	cam.zoom = std::min(std::min((float)(GetMonitorWidth(GetCurrentMonitor()) - 100.0f) / (float)GetScreenWidth(), (float)(GetMonitorHeight(GetCurrentMonitor()) - 100.0f) / (float)GetScreenHeight()), 1.0f);
+
+	SetWindowMinSize((settings::MIN_ORIG_WINDOW_WIDTH)*cam.zoom, (settings::MIN_ORIG_WINDOW_HEIGHT)*cam.zoom);
+	SetWindowSize((settings::MIN_ORIG_WINDOW_WIDTH)*cam.zoom, (settings::MIN_ORIG_WINDOW_HEIGHT)*cam.zoom);
 	SetExitKey(0);
 	ChangeDirectory(GetApplicationDirectory());
 	SetTargetFPS(4000);
@@ -96,7 +96,7 @@ void Render(Camera2D &cam, Font &font, int fractalNumber, int selectedTab, int c
 		{
 			tabColor = settings::BG_COLOR;
 		}
-		
+
 		DrawRectangle(i * settings::TABSIZE.x, 0, settings::TABSIZE.x, settings::TABSIZE.y, tabColor);
 		DrawLine((i + 1) * settings::TABSIZE.x - 1, 0, (i + 1) * settings::TABSIZE.x - 1, settings::TABSIZE.y, WHITE);
 		std::string name = fractals[i].GetName();
@@ -112,12 +112,11 @@ void Render(Camera2D &cam, Font &font, int fractalNumber, int selectedTab, int c
 
 	std::string hints = "Press STRG + R\nto re-plot the graph!\n\nPress STRG + S\nto save the image!";
 	float hintsMeasure = MeasureTextEx(font, hints.c_str(), settings::FONT_SIZE_2, settings::FONT_SPACING).y;
-	DrawTextEx(font, hints.c_str(), {settings::PARTING  + 20, GetScreenHeight() / cam.zoom - (hintsMeasure + 50)}, settings::FONT_SIZE_2, settings::FONT_SPACING, WHITE);
+	DrawTextEx(font, hints.c_str(), {settings::PARTING + 20, GetScreenHeight() / cam.zoom - (hintsMeasure + 50)}, settings::FONT_SIZE_2, settings::FONT_SPACING, WHITE);
 
 	std::string fps = (std::to_string(GetFPS()) + " FPS");
 	Vector2 measureFPS = MeasureTextEx(font, fps.c_str(), settings::FONT_SIZE, settings::FONT_SPACING);
 	DrawTextEx(font, fps.c_str(), {GetScreenWidth() / cam.zoom - measureFPS.x - 10, GetScreenHeight() / cam.zoom - measureFPS.y - 5}, settings::FONT_SIZE, settings::FONT_SPACING, WHITE);
-
 }
 
 int UpdateSlectedTab(Camera2D &cam, int fractalNumber, int *currentFractal)

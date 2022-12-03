@@ -6,7 +6,7 @@ namespace mandelbrot
 {
 #define number long double
 
-	number ITERATIONS_MAX = 500;
+	number ITERATIONS_MAX = 100;
 
 	// imaginärer Anteil von c
 	number IM_MIN = -1; // y-axis
@@ -67,15 +67,15 @@ namespace mandelbrot
 
 	ComplexNumber c;
 
-	void RenderAdditional(Texture2D &texture, Font &font, Camera2D &cam)
+	void RenderAdditional(Font &font, Camera2D &cam)
 	{
-		if (currentPixel <= texture.width)
+		if (currentPixel <= settings::IMAGE_WIDTH)
 		{
-			DrawLine(settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y, settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y + texture.height, {255, 255, 255, 50});
+			DrawLine(settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y, settings::DRAW_OFFSET.x + currentPixel, settings::DRAW_OFFSET.y + settings::IMAGE_HEIGHT, {255, 255, 255, 50});
 		}
 	}
 
-	void Iterate(RenderTexture2D &canvas, ComplexNumber c)
+	void Iterate(Image &image, ComplexNumber c)
 	{
 		ComplexNumber z(0.0L, 0.0L);
 
@@ -90,21 +90,17 @@ namespace mandelbrot
 			z = z.Pow() + c;
 		}
 
-		BeginTextureMode(canvas);
-		BeginBlendMode(BLEND_ADDITIVE);
 		if (iterations >= ITERATIONS_MAX)
 		{
-			DrawPixelV({(float)c.xImage, (float)c.yImage}, settings::DEFAULT_COLOR);
+			ImageDrawPixel(&image, (float)c.xImage, (float)c.yImage, settings::DEFAULT_COLOR);
 		}
 		else if (RENDER_SURROUNDING)
 		{
-			DrawPixelV({(float)c.xImage, (float)c.yImage}, {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, (unsigned char)(iterations * 2)});
+			ImageDrawPixel(&image, (float)c.xImage, (float)c.yImage, {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, (unsigned char)(iterations * 2)});
 		}
-		EndBlendMode();
-		EndTextureMode();
 	}
 
-	bool Update(RenderTexture2D &canvas)
+	bool Update(RenderTexture2D &canvas, Image &image)
 	{
 		if (currentPixel <= settings::IMAGE_WIDTH)
 		{
@@ -113,7 +109,7 @@ namespace mandelbrot
 				for (int y = 0; y <= settings::IMAGE_HEIGHT; y++)
 				{
 					c = {currentPixel, y};
-					Iterate(canvas, c);
+					Iterate(image, c);
 				}
 				currentPixel++;
 			}
@@ -122,7 +118,7 @@ namespace mandelbrot
 		return false;
 	}
 
-	void Reset(RenderTexture2D &canvas)
+	void Reset(Image &image)
 	{
 		currentPixel = 0;
 	}

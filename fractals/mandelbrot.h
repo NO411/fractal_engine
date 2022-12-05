@@ -65,7 +65,7 @@ namespace mandelbrot
 		}
 		else if (RENDER_SURROUNDING)
 		{
-			ImageDrawPixel(&image, (float)c.xImage, (float)c.yImage, {settings::DEFAULT_COLOR.r, settings::DEFAULT_COLOR.g, settings::DEFAULT_COLOR.b, (unsigned char)(iterations * 2)});
+			ImageDrawPixel(&image, (float)c.xImage, (float)c.yImage, {(unsigned char)(settings::DEFAULT_COLOR.r * (1.5 * iterations / ITERATIONS_MAX)), (unsigned char)(settings::DEFAULT_COLOR.g * (1.5 * iterations / ITERATIONS_MAX)), (unsigned char)(settings::DEFAULT_COLOR.b * (1.5 * iterations / ITERATIONS_MAX)), 255});
 		}
 	}
 

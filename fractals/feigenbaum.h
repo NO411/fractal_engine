@@ -1,6 +1,5 @@
 #pragma once
 #include "../src/fractal.h"
-#include <array>
 
 namespace feigenbaum
 {

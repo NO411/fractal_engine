@@ -1,6 +1,5 @@
 #pragma once
 #include "../src/fractal.h"
-#include <cmath>
 
 namespace buddhabrot
 {
@@ -31,48 +30,8 @@ namespace buddhabrot
 
 	int currentPixel = 0;
 
-	class ComplexNumber
-	{
-	private:
-	public:
-		number re;
-		number im;
-
-		int xImage;
-		int yImage;
-
-		ComplexNumber() {}
-
-		ComplexNumber(number re, number im) : re(re), im(im) {}
-
-		ComplexNumber(int xImage, int yImage) : xImage(xImage), yImage(yImage)
-		{
-			re = RE_MIN + xImage / (number)settings::IMAGE_WIDTH * (RE_MAX - RE_MIN);
-			im = IM_MIN + yImage / (number)settings::IMAGE_HEIGHT * (IM_MAX - IM_MIN);
-		}
-
-		int GetXImage()
-		{
-			return (int)((re - RE_MIN) * settings::IMAGE_WIDTH / (RE_MAX - RE_MIN));
-		}
-
-		int GetYImage()
-		{
-			return (int)((im - IM_MIN) * settings::IMAGE_HEIGHT / (IM_MAX - IM_MIN));
-		}
-
-		ComplexNumber Pow()
-		{
-			return {pow(re, 2) - pow(im, 2), 2 * re * im};
-		}
-
-		ComplexNumber operator+(ComplexNumber c)
-		{
-			return {c.re + re, c.im + im};
-		}
-	};
-
 	ComplexNumber c;
+	ComplexNumber z;
 
 	void RenderAdditional(Font &font, Camera2D &cam)
 	{
@@ -82,13 +41,13 @@ namespace buddhabrot
 		}
 	}
 
-	void Iterate(Image &image, ComplexNumber c, int currentPixel, int y, bool diverged)
+	void Iterate(Image &image, int currentPixel, int y, bool diverged)
 	{
-		ComplexNumber z(0.0L, 0.0L);
+		z = {0.0L, 0.0L};
 		int iterations;
 		for (iterations = 0; iterations <= ITERATIONS_MAX; iterations++)
 		{
-			if (pow(z.im, 2) + pow(z.re, 2) > 4)
+			if ((z.im * z.im + z.re * z.re) > 4)
 			{
 				break; // diverged
 			}
@@ -97,13 +56,13 @@ namespace buddhabrot
 
 			if (diverged)
 			{
-				ImageDrawPixel(&image, z.GetXImage(), z.GetYImage(), AddColor(&image, z.GetXImage(), z.GetYImage(), {100, 100, 200, 5}));
+				ImageDrawPixel(&image, z.GetXImage(RE_MIN, RE_MAX), z.GetYImage(IM_MIN, IM_MAX), AddColor(&image, z.GetXImage(RE_MIN, RE_MAX), z.GetYImage(IM_MIN, IM_MAX), {100, 100, 200, 5}));
 			}
 		}
 
 		if (iterations < ITERATIONS_MAX && !diverged)
 		{
-			Iterate(image, c, currentPixel, y, true);
+			Iterate(image, currentPixel, y, true);
 		}
 	}
 
@@ -113,8 +72,8 @@ namespace buddhabrot
 		{
 			for (int y = 0; y <= settings::IMAGE_HEIGHT; y++)
 			{
-				c = {currentPixel, y};
-				Iterate(image, c, currentPixel, y, false);
+				c = {currentPixel, y, RE_MIN, RE_MAX, IM_MIN, IM_MAX};
+				Iterate(image, currentPixel, y, false);
 			}
 			currentPixel++;
 			return true;

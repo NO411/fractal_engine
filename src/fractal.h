@@ -4,6 +4,7 @@
 #include "switch.h"
 #include "misc.h"
 #include "coordinate_system.h"
+#include "complex_number.h"
 #include <vector>
 #include <string>
 #include <functional>

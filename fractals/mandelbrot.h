@@ -1,6 +1,5 @@
 #pragma once
 #include "../src/fractal.h"
-#include <cmath>
 
 namespace mandelbrot
 {
@@ -34,38 +33,8 @@ namespace mandelbrot
 
 	int currentPixel = 0;
 
-	class ComplexNumber
-	{
-	private:
-	public:
-		number re;
-		number im;
-
-		int xImage;
-		int yImage;
-
-		ComplexNumber() {}
-
-		ComplexNumber(number re, number im) : re(re), im(im) {}
-
-		ComplexNumber(int xImage, int yImage) : xImage(xImage), yImage(yImage)
-		{
-			re = RE_MIN + xImage / (number)settings::IMAGE_WIDTH * (RE_MAX - RE_MIN);
-			im = IM_MIN + yImage / (number)settings::IMAGE_HEIGHT * (IM_MAX - IM_MIN);
-		}
-
-		ComplexNumber Pow()
-		{
-			return {pow(re, 2) - pow(im, 2), 2 * re * im};
-		}
-
-		ComplexNumber operator+(ComplexNumber c)
-		{
-			return {c.re + re, c.im + im};
-		}
-	};
-
 	ComplexNumber c;
+	ComplexNumber z;
 
 	void RenderAdditional(Font &font, Camera2D &cam)
 	{
@@ -77,12 +46,12 @@ namespace mandelbrot
 
 	void Iterate(Image &image, ComplexNumber c)
 	{
-		ComplexNumber z(0.0L, 0.0L);
+		z = {0.0L, 0.0L};
 
 		int iterations;
 		for (iterations = 0; iterations <= ITERATIONS_MAX; iterations++)
 		{
-			if (pow(z.im, 2) + pow(z.re, 2) > 4)
+			if (z.im * z.im + z.re * z.re > 4)
 			{
 				break;
 			}
@@ -104,15 +73,12 @@ namespace mandelbrot
 	{
 		if (currentPixel <= settings::IMAGE_WIDTH)
 		{
-			for (int i = 0; i < 2; i++)
+			for (int y = 0; y <= settings::IMAGE_HEIGHT; y++)
 			{
-				for (int y = 0; y <= settings::IMAGE_HEIGHT; y++)
-				{
-					c = {currentPixel, y};
-					Iterate(image, c);
-				}
-				currentPixel++;
+				c = {currentPixel, y, RE_MIN, RE_MAX, IM_MIN, IM_MAX};
+				Iterate(image, c);
 			}
+			currentPixel++;
 			return true;
 		}
 		return false;

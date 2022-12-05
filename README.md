@@ -37,7 +37,7 @@ cd <path to your installation folder>
 Then run:
 
 ```
-sudo apt install g++ git make libasound2-dev mesa-common-dev libx11-dev libxrandr-dev libxi-dev xorg-dev libgl1-mesa-dev libglu1-mesa-dev && git clone https://github.com/NO411/fractal_engine && git clone https://github.com/raysan5/raylib && cd raylib/src && make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED && sudo make install RAYLIB_LIBTYPE=SHARED && cd ../../fractal_engine/src && g++ main.cpp -o ../fractal_engine -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -std=c++2a && ./../fractal_engine
+sudo apt install g++ git make libasound2-dev mesa-common-dev libx11-dev libxrandr-dev libxi-dev xorg-dev libgl1-mesa-dev libglu1-mesa-dev && git clone https://github.com/NO411/fractal_engine && git clone https://github.com/raysan5/raylib && cd raylib/src && make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED && sudo make install RAYLIB_LIBTYPE=SHARED && cd ../../fractal_engine/src && g++ main.cpp -o ../fractal_engine -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -std=c++2a -O3 -ffast-math && ./../fractal_engine
 ```
 
 To run the program after installing it in your installation folder, type:

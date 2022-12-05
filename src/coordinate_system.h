@@ -13,7 +13,6 @@ private:
 
     long double *minX;
     long double *maxX;
-
     long double *minY;
     long double *maxY;
 

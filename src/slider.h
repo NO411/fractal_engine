@@ -127,9 +127,17 @@ void Slider::UpdateValue()
 
 void Slider::Update(Camera2D &cam)
 {
-	if (IsMouseButtonPressed(0) && Selected(cam))
+	if (IsMouseButtonPressed(0))
 	{
-		moving = true;
+		if (Selected(cam))
+		{
+			moving = true;
+		}
+		else if (CheckCollisionPointRec(GetMousePositionScaled(cam), {pos.x, pos.y - 3, length, 6}))
+		{
+			sliderPercentage = (GetMousePositionScaled(cam).x - pos.x) / length;
+			moving = true;
+		}
 	}
 
 	if (IsMouseButtonReleased(0))

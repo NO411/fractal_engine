@@ -19,7 +19,7 @@ Installed fractals:
 </p>
 
 <p float="left">
-  <img src="https://raw.githubusercontent.com/NO411/fractal_engine/main/pictures/Buddhabrot/Buddhabrot_0.png" width="600" />
+  <img src="https://raw.githubusercontent.com/NO411/fractal_engine/main/pictures/Buddhabrot/Buddhabrot_1.png" width="600" />
 </p>
 
 ## Installation
